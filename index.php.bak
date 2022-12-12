@@ -1,0 +1,41 @@
+<html>
+<title> Car Rentals </title>
+<body>
+<table align="center">
+<tr> <td align="center">
+	<h1 style="color:red"> Login Please </h1>
+<form method="POST">
+	<label for="username"> Username: </label> <br>
+	<input type="text" id="username" name="username"> <br>
+	<label for="password"> Password: </label> <br>
+	<input type="password" id="password" name="password"> <br>
+	<input type="submit" name="submit">
+</form>
+<form method="POST" action="signup.php">
+	<input type="submit" name="signup" value="New user? Register Here.">
+</form>
+
+<?php 
+	if (isset($_POST['submit'])) {
+	$cnx = new mysqli('localhost', 'root', '', 'carrentals');
+	$query = 'SELECT COUNT(*) AS cred FROM users WHERE Username="' . $_POST['username'] . '" AND Password="' . $_POST['password'] . '"';
+	$cursor = $cnx->query($query);
+	while ($row = $cursor->fetch_assoc()) {
+		$valid = $row['cred'];
+	}
+	if ($valid == 1) {
+	echo '<h4 style="color:red"> You have logged in! </h4> <br>';
+		echo 'Clink on links below for query pages! <br>';
+		echo '<a href="page1.php">Query 1 </a> <br>';
+		echo '<a href="page2.php">Query 2 </a> <br>';
+	}
+	else 
+	echo '<h4 style="color:red"> Invalid login credentials. Please try again! </h4>';
+	$cnx->close();
+	}
+?>
+
+</td> </tr> </table>
+</body>
+</title>
+</html>

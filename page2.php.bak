@@ -1,0 +1,44 @@
+<html>
+<title> Car Rentals </title>
+<body>
+<p align="left"> <a href="index.html"> Home page </a> </p>
+<p align="left"> <a href="signin.php"> signin page </a> </p>
+<p align="left"> <a href="page1.php"> Query 1</a> </p> 
+<p align="left"> <a href="page2.php"> Query 2 </a> </p>
+<table align="center">
+<tr> <td align="center">
+	<h1 style="color:red"> Find the customer id and names of customers who have rented at least two cars (i.e. have at least 2 rental agreements). </h1> <br>
+	<p align="center">SELECT Customer_Id, First_Name, Last_Name, Customercount(*) as Number_Of_Rentals <br>
+From RENTAL_AGREEMENT c JOIN RESERVATION r ON Contract_Reservation_Id=Reservation_Id JOIN CUSTOMER p ON Reserving_Customer_Id=Customer_Id JOIN CAR_CLASS cc ON Vehicle_Class_Id=Class_ID <br>
+GROUP BY Customer_ID <br>
+HAVING COUNT(*)>=2; <br>
+</p> 
+<form method="POST">
+	<input type="submit" name="query2" value="Execute">
+</form>
+</td> </tr> </table>
+<?php 
+	if (isset($_POST['query2'])) {
+	$cnx = new mysqli('localhost', 'root', '', 'carrentals');
+	$query = 'SELECT Customer_Id, First_Name, Last_Name, count(*) as Number_Of_Rentals
+From RENTAL_AGREEMENT c JOIN RESERVATION r ON Contract_Reservation_Id=Reservation_Id JOIN CUSTOMER p ON Reserving_Customer_Id=Customer_Id JOIN CAR_CLASS cc ON Vehicle_Class_Id=Class_ID
+GROUP BY Customer_ID
+HAVING COUNT(*)>=2';
+	$cursor = $cnx->query($query);
+	echo '<table border="2" align="center"><tr> <td> Customer_Id </td> <td> First_Name </td><td> Last_Name </td>
+	<td> Number_Of_Rentals </td></tr>';
+	while ($row = $cursor->fetch_assoc()) {
+		echo '<tr>';
+		echo '<td>' . $row['Customer_Id'] . '</td>';
+		echo '<td> ' . $row['First_Name'] . '</td>';
+		echo '<td> ' . $row['Last_Name'] . '</td>';
+		echo '<td> ' . $row['Number_Of_Rentals'] . '</td>';
+		echo '</tr>';
+	}
+	echo '</table>';
+	$cnx->close();
+	}
+?>
+</body>
+</title>
+</html>
